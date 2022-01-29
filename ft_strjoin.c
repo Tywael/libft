@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/13 16:56:17 by yalthaus          #+#    #+#             */
-/*   Updated: 2021/10/14 22:23:04 by yalthaus         ###   ########.fr       */
+/*   Created: 2021/10/11 17:03:46 by esanchez          #+#    #+#             */
+/*   Updated: 2022/01/29 14:25:52 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,28 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*str;
-	size_t	i;
-	size_t	j;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
+	j = 0;
 	if (!s1 || !s2)
 		return (NULL);
-	j = 0;
-	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (str == NULL)
+	tmp = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!tmp)
 		return (NULL);
-	while (*(s1 + i))
+	while (s1[i] != '\0')
 	{
-		*(str + i) = *(s1 + i);
+		tmp[i] = s1[i];
 		i++;
 	}
-	while (*(s2 + j))
+	while (s2[j] != '\0')
 	{
-		*(str + i + j) = *(s2 + j);
+		tmp[i] = s2[j];
+		i++;
 		j++;
 	}
-	*(str + i + j) = '\0';
-	return (str);
+	tmp[i] = '\0';
+	return (tmp);
 }
