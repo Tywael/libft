@@ -59,7 +59,10 @@ SRCNAMES		=	ft_isalpha.c\
 					ft_isspace.c\
 					skip_space.c\
 					ft_atof.c\
-					ft_atox.c
+					ft_atox.c\
+					ft_sscanf.c\
+					ft_sscanf_skip.c\
+					ft_sscanf_scan.c
 BONUS			=	ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
 					ft_lstdelone.c ft_lstiter.c ft_lstlast.c \
 					ft_lstmap.c ft_lstnew.c ft_lstsize.c
