@@ -17,15 +17,10 @@ NAME 	= libft.a
 #compiler option
 CC 		= gcc
 CFLAGS 	= -Wall -Werror -Wextra
+HEADS	= -I$(INC)
 
-RM 		= rm -f
-
-#header path
-HEADER 	= -I includes
-
-
-
-SRCS			=	ft_isalpha.c\
+#src
+SRCNAMES		=	ft_isalpha.c\
 					ft_memcmp.c\
 					ft_strchr.c\
 					ft_strrchr.c\
@@ -58,32 +53,58 @@ SRCS			=	ft_isalpha.c\
 					ft_split.c\
 					ft_itoa.c\
 					ft_strmapi.c\
-					ft_striteri.c\
-
-OBJS			= $(SRCS:.c=.o)
-
+					ft_striteri.c
 BONUS			=	ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
 					ft_lstdelone.c ft_lstiter.c ft_lstlast.c \
 					ft_lstmap.c ft_lstnew.c ft_lstsize.c
-BONUS_OBJS		= $(BONUS:.c=.o)
+SRCDIR 		= ./src/
+INC			= ./inc/
+BUILDDIR	= ./build/
+SRCS		= $(addprefix $(SRCDIR), $(SRCNAMES))
+SRCSBONUS	= $(addprefix $(SRCDIR), $(BONUS))
+
+#objs
+OBJS			= $(addprefix $(BUILDDIR), $(SRCNAMES:.c=.o))
+BONUS_OBJS		= $(addprefix $(BUILDDIR), $(BONUS:.c=.o))
+
+#cmd
+RM		= rm -rf
+MKDIR	= mkdir -p
+
+# Color
+_COLOR		= \033[32m
+_BOLDCOLOR	= \033[32;1m
+_RESET		= \033[0m
+_CLEAR		= \033[0K\r\c
+_OK			= [\033[32mOK\033[0m]
+_RM			= [\033[31mRM\033[0m]
 
 # build
-all 	: 	${NAME}
+all: ${NAME}
 
-%.o 	: 	%.c
-				${CC} ${CFLAGS} -c ${HEADER} $< -o ${<:.c=.o}
+bonus: $(NAME) $(BONUS_OBJS)
+	@ar rcs $(NAME) $(BONUS_OBJS)
 
-${NAME} : 	${OBJS}
-				ar -rcs $@ $^
+$(BUILDDIR):
+	@mkdir -p $(BUILDDIR)
 
-clean 	:
-				${RM} ${OBJS} $(BONUS_OBJS)
+${NAME} .SILENT: $(BUILDDIR) $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
+	@echo "$(_OK) $(NAME) \t\tcompiled"
 
-fclean 	: 	clean
-				${RM} ${NAME}
+$(BUILDDIR)%.o:$(SRCDIR)%.c
+	@echo "[..] $(NAME)... compiling $*.c\r\c"
+	@$(CC) -c $(CFLAGS) $(HEADS) $< -o $@
+	@echo "$(_CLEAR)"
 
-re 		: 	fclean all
-bonus:		$(OBJS) $(BONUS_OBJS)
-				ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+clean:
+	@echo "[..] $(NAME)... removing $*.c\r\c"
+	@rm -rf $(BUILDDIR)
+	@echo "$(_CLEAR)"
 
+fclean: clean
+	@rm -rf $(NAME)
+	@echo "$(_RM) $(NAME) \t\tfull clean"
+
+re: fclean all
 .PHONY 	: 	all clean fclean re bonus
